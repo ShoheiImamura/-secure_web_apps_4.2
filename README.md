@@ -28,13 +28,14 @@ transition : "default"
 ### 目次
 
 - [入力処理の概要](#入力処理の概要)
-- [文字エンコーディングの妥当性検証](#文字エンコーディングの妥当性検証)
-- [文字エンコーディングの変換](#文字エンコーディングの変換)
-- [入力値の検証](#入力値の検証)
-- [バイナリセーフとヌルバイト攻撃](#appendix-1)
-- [正規表現による入力値検証](#appendix-2)
-- [入力値検証とフレームワーク](#appendix-3)
-- [サンプルアプリケーション](#appendix-4)
+  - [文字エンコーディングの妥当性検証](#文字エンコーディングの妥当性検証)
+  - [文字エンコーディングの変換](#文字エンコーディングの変換)
+  - [入力値の検証](#入力値の検証)
+- Appendix
+  - [バイナリセーフとヌルバイト攻撃](#appendix-1)
+  - [正規表現による入力値検証](#appendix-2)
+  - [入力値検証とフレームワーク](#appendix-3)
+  - [サンプルアプリケーション](#appendix-4)
 
 ---
 
@@ -64,7 +65,7 @@ Webアプリケーションの入力値
 - 入力値を受け付ける際に行う処理
 - 「入力-処理-出力」のデータ準備段階
 
-![入力-処理-出力モデル]()
+![入力-処理-出力モデル](./image/../images/input_process.png)
 
 --
 
@@ -134,7 +135,7 @@ mb_check_encoding (string $var, string $encoding) : bool
 
 --
 
-### 文字エンコーディングの検証コード
+### 文字エンコーディングの検証例
 
 - パラメータ値（'name'）が SHIFT-JIS かチェック
 
@@ -150,12 +151,12 @@ if(! mb_check_encoding($name, 'Shift_JIS')) {
 
 --
 
-### 文字エンコーディングの検証例
+### 文字エンコーディングの検証例（2）
 
 - パラメータが Shift-JIS
-    - [https://example.jp/42/42-001.php?name=%8ER%93c](https://example.jp/42/42-001.php?name=%8ER%93c)
+    - [http://example.jp/42/42-001.php?name=%8ER%93c](https://example.jp/42/42-001.php?name=%8ER%93c)
 - パラメータが Shift-JIS 以外
-    - [https://example.jp/42/42-001.php?name=%82%21](https://example.jp/42/42-001.php?name=%82%21)
+    - [http://example.jp/42/42-001.php?name=%82%21](https://example.jp/42/42-001.php?name=%82%21)
 
 ---
 
