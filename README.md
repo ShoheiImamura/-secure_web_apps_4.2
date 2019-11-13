@@ -178,6 +178,8 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
 
 ```
 
+[サンプルコード 42-001.php](https://github.com/ShoheiImamura/secure_web_apps_4.2/blob/master/sample_42/42-001.php#L7-L9)
+
 ---
 
 ### 入力値の検証
@@ -203,8 +205,8 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
 
 - 本来実施すべき脆弱性対策が漏れていた場合に実害を抑える事がある
   - SQL インジェクション未対策時
-  - PHP バイナリセーフ関数を利用時
-  - 表示処理に文字エンコーディング忘れ時
+  - PHP バイナリセーフでない関数の利用時
+  - 文字エンコーディング処理を怠った時
 
 --
 
@@ -216,7 +218,7 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
 
 --
 
-### 要件に応じた入力値検証
+### 要件に応じた入力値検証（p108）
 
 - アプリケーション仕様に応じて、入力値のチェックを行う
   - 制御文字チェック
@@ -231,7 +233,7 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
 - 制御文字とは、通常表示されない文字
   - 改行、タブ、等々
 
-![](./images/ascii_controll_character.png)
+[![制御文字](./images/ascii_controll_character.png)](https://raw.githubusercontent.com/ShoheiImamura/secure_web_apps_4.2/master/images/ascii_controll_character.png)
 
 --
 
@@ -258,18 +260,18 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
 
 ### その他の注意点
 
-- 入力項目が指定されていない場合
-- 配列形式で入力される場合
+- 入力項目がない場合
+- 型が異なる場合
   - [filter_input()](https://www.php.net/manual/ja/function.filter-input.php) を利用
 
 ---
 
 ### appendix
 
-1. バイナリセーフとヌルバイト攻撃
-2. 正規表現による入力値検証
-3. 入力値検証とフレームワーク
-4. サンプルアプリケーション
+1. バイナリセーフとヌルバイト攻撃(p106)
+2. 正規表現による入力値検証(p111~,118)
+3. 入力値検証とフレームワーク(p116)
+4. サンプルアプリケーション(p115)
 
 ---
 
@@ -327,10 +329,10 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
 #### ヌルバイト攻撃に脆弱なサンプル実行
 
 - 正常系
-  - [https://example.jp/42/42-002.php?p=1234](https://example.jp/42/42-002.php?p=1234)
-  - [https://example.jp/42/42-002.php?p=123a](https://example.jp/42/42-002.php?p=123a)
+  - [http://example.jp/42/42-002.php?p=1234](http://example.jp/42/42-002.php?p=1234)
+  - [http://example.jp/42/42-002.php?p=123a](http://example.jp/42/42-002.php?p=123a)
 - 異常系
-  - [https://example.jp/42/42-002.php?p=1%00\<script\>alert('XSS')\</script\>](https://example.jp/42/42-002.php?p=1%00<script>alert('XSS')</script>)
+  - [http://example.jp/42/42-002.php?p=1%00\<script\>alert('XSS')\</script\>](http://example.jp/42/42-002.php?p=1%00<script>alert('XSS')</script>)
 
 --
 
@@ -358,11 +360,11 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
 
 #### PHP の正規表現関数
 
-| 関数    | 補足                                   |
-|---------|----------------------------------------|
-| ereg    | 利用しない（PHP7.0以降削除）           |
-| preg    | UTF-8 の場合のみ日本語を扱える         |
-| mb_ereg | 様々な文字エンコーディングが利用できる |
+| 関数       | 特徴                                   |
+|------------|----------------------------------------|
+| ereg 系    | 利用しない（PHP7.0以降削除）           |
+| preg 系    | UTF-8 の場合のみ日本語を扱える         |
+| mb_ereg 系 | 様々な文字エンコーディングが利用できる |
 
 --
 
@@ -375,7 +377,7 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
     // preg_match 関数を利用する場合
 
     $p = filter_input(INPUT_GET, 'p');
-    if (preg_match('\/A[a-z0-9]{1,5}\z/ui', $p) !== 1) {
+    if (preg_match('/\A[a-z0-9]{1,5}\z/ui', $p) !== 1) {
         die('1文字以上5文字以下の英数字を入力してください');
     }
 
@@ -391,7 +393,7 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
 
 #### 正規表現による入力値検証の例（２）
 
-- 制御文字を含んでいないこと
+- 制御文字を含まないことをチェック
   - [[:^cntrl:]]という[POSIX文字クラス](https://www.php.net/manual/ja/regexp.reference.character-classes.php)を利用
 
 ```php
@@ -413,6 +415,7 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
 #### 定義済み文字クラスと正規表現
 
 - 定義済み文字クラス（\d や \w ）よりも文字クラスを明示するほうが安全
+    - 全角文字を含む場合がある
 
 ---
 
@@ -445,6 +448,6 @@ public function rules()
 
 サンプルアプリケーション
 
-https://example.jp/42/
+http://example.jp/42/
 
 
