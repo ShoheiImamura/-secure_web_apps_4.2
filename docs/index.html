@@ -304,14 +304,21 @@
             <section >
                 <h3><a id="user-content-目次" class="anchor" href="#目次" aria-hidden="true"></a>目次</h3>
 <ul>
-<li><a href="#%E5%85%A5%E5%8A%9B%E5%87%A6%E7%90%86%E3%81%AE%E6%A6%82%E8%A6%81">入力処理の概要</a></li>
+<li><a href="#%E5%85%A5%E5%8A%9B%E5%87%A6%E7%90%86%E3%81%AE%E6%A6%82%E8%A6%81">入力処理の概要</a>
+<ul>
 <li><a href="#%E6%96%87%E5%AD%97%E3%82%A8%E3%83%B3%E3%82%B3%E3%83%BC%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%A6%A5%E5%BD%93%E6%80%A7%E6%A4%9C%E8%A8%BC">文字エンコーディングの妥当性検証</a></li>
 <li><a href="#%E6%96%87%E5%AD%97%E3%82%A8%E3%83%B3%E3%82%B3%E3%83%BC%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%A4%89%E6%8F%9B">文字エンコーディングの変換</a></li>
 <li><a href="#%E5%85%A5%E5%8A%9B%E5%80%A4%E3%81%AE%E6%A4%9C%E8%A8%BC">入力値の検証</a></li>
+</ul>
+</li>
+<li>Appendix
+<ul>
 <li><a href="#appendix-1">バイナリセーフとヌルバイト攻撃</a></li>
 <li><a href="#appendix-2">正規表現による入力値検証</a></li>
 <li><a href="#appendix-3">入力値検証とフレームワーク</a></li>
 <li><a href="#appendix-4">サンプルアプリケーション</a></li>
+</ul>
+</li>
 </ul>
 
             </section>
@@ -356,7 +363,7 @@
 <li>入力値を受け付ける際に行う処理</li>
 <li>「入力-処理-出力」のデータ準備段階</li>
 </ul>
-<p><img src="" alt="入力-処理-出力モデル"></p>
+<p><img src="./image/../images/input_process.png" alt="入力-処理-出力モデル"></p>
 
             </section>
         
@@ -487,7 +494,7 @@
             </section>
         
             <section >
-                <h3><a id="user-content-文字エンコーディングの検証コード" class="anchor" href="#文字エンコーディングの検証コード" aria-hidden="true"></a>文字エンコーディングの検証コード</h3>
+                <h3><a id="user-content-文字エンコーディングの検証例" class="anchor" href="#文字エンコーディングの検証例" aria-hidden="true"></a>文字エンコーディングの検証例</h3>
 <ul>
 <li>パラメータ値（‘name’）が SHIFT-JIS かチェック</li>
 </ul>
@@ -503,16 +510,16 @@ if(! mb_check_encoding($name, 'Shift_JIS')) {
             </section>
         
             <section >
-                <h3><a id="user-content-文字エンコーディングの検証例" class="anchor" href="#文字エンコーディングの検証例" aria-hidden="true"></a>文字エンコーディングの検証例</h3>
+                <h3><a id="user-content-文字エンコーディングの検証例（2）" class="anchor" href="#文字エンコーディングの検証例（2）" aria-hidden="true"></a>文字エンコーディングの検証例（2）</h3>
 <ul>
 <li>パラメータが Shift-JIS
 <ul>
-<li><a href="https://example.jp/42/42-001.php?name=%8ER%93c">https://example.jp/42/42-001.php?name=%8ER%93c</a></li>
+<li><a href="https://example.jp/42/42-001.php?name=%8ER%93c">http://example.jp/42/42-001.php?name=%8ER%93c</a></li>
 </ul>
 </li>
 <li>パラメータが Shift-JIS 以外
 <ul>
-<li><a href="https://example.jp/42/42-001.php?name=%82%21">https://example.jp/42/42-001.php?name=%82%21</a></li>
+<li><a href="https://example.jp/42/42-001.php?name=%82%21">http://example.jp/42/42-001.php?name=%82%21</a></li>
 </ul>
 </li>
 </ul>
@@ -549,6 +556,7 @@ if(! mb_check_encoding($name, 'Shift_JIS')) {
 $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
 
 </code></pre>
+<p><a href="https://github.com/ShoheiImamura/secure_web_apps_4.2/blob/master/sample_42/42-001.php#L7-L9">サンプルコード 42-001.php</a></p>
 
             </section>
         
@@ -594,8 +602,8 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
 <li>本来実施すべき脆弱性対策が漏れていた場合に実害を抑える事がある
 <ul>
 <li>SQL インジェクション未対策時</li>
-<li>PHP バイナリセーフ関数を利用時</li>
-<li>表示処理に文字エンコーディング忘れ時</li>
+<li>PHP バイナリセーフでない関数の利用時</li>
+<li>文字エンコーディング処理を怠った時</li>
 </ul>
 </li>
 </ul>
@@ -616,7 +624,7 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
             </section>
         
             <section >
-                <h3><a id="user-content-要件に応じた入力値検証" class="anchor" href="#要件に応じた入力値検証" aria-hidden="true"></a>要件に応じた入力値検証</h3>
+                <h3><a id="user-content-要件に応じた入力値検証（p108）" class="anchor" href="#要件に応じた入力値検証（p108）" aria-hidden="true"></a>要件に応じた入力値検証（p108）</h3>
 <ul>
 <li>アプリケーション仕様に応じて、入力値のチェックを行う
 <ul>
@@ -639,7 +647,7 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
 </ul>
 </li>
 </ul>
-<p><img src="./images/ascii_controll_character.png" alt=""></p>
+<p><a href="https://raw.githubusercontent.com/ShoheiImamura/secure_web_apps_4.2/master/images/ascii_controll_character.png"><img src="./images/ascii_controll_character.png" alt="制御文字"></a></p>
 
             </section>
         
@@ -676,8 +684,8 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
             <section >
                 <h3><a id="user-content-その他の注意点" class="anchor" href="#その他の注意点" aria-hidden="true"></a>その他の注意点</h3>
 <ul>
-<li>入力項目が指定されていない場合</li>
-<li>配列形式で入力される場合
+<li>入力項目がない場合</li>
+<li>型が異なる場合
 <ul>
 <li><a href="https://www.php.net/manual/ja/function.filter-input.php">filter_input()</a> を利用</li>
 </ul>
@@ -697,10 +705,10 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
             
             <h3><a id="user-content-appendix" class="anchor" href="#appendix" aria-hidden="true"></a>appendix</h3>
 <ol>
-<li>バイナリセーフとヌルバイト攻撃</li>
-<li>正規表現による入力値検証</li>
-<li>入力値検証とフレームワーク</li>
-<li>サンプルアプリケーション</li>
+<li>バイナリセーフとヌルバイト攻撃(p106)</li>
+<li>正規表現による入力値検証(p111~,118)</li>
+<li>入力値検証とフレームワーク(p116)</li>
+<li>サンプルアプリケーション(p115)</li>
 </ol>
 
             </section>
@@ -800,13 +808,13 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
 <ul>
 <li>正常系
 <ul>
-<li><a href="https://example.jp/42/42-002.php?p=1234">https://example.jp/42/42-002.php?p=1234</a></li>
-<li><a href="https://example.jp/42/42-002.php?p=123a">https://example.jp/42/42-002.php?p=123a</a></li>
+<li><a href="http://example.jp/42/42-002.php?p=1234">http://example.jp/42/42-002.php?p=1234</a></li>
+<li><a href="http://example.jp/42/42-002.php?p=123a">http://example.jp/42/42-002.php?p=123a</a></li>
 </ul>
 </li>
 <li>異常系
 <ul>
-<li><a href="https://example.jp/42/42-002.php?p=1%00%3Cscript%3Ealert('XSS')%3C/script%3E">https://example.jp/42/42-002.php?p=1%00&lt;script&gt;alert(‘XSS’)&lt;/script&gt;</a></li>
+<li><a href="http://example.jp/42/42-002.php?p=1%00%3Cscript%3Ealert('XSS')%3C/script%3E">http://example.jp/42/42-002.php?p=1%00&lt;script&gt;alert(‘XSS’)&lt;/script&gt;</a></li>
 </ul>
 </li>
 </ul>
@@ -853,20 +861,20 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
 <thead>
 <tr>
 <th>関数</th>
-<th>補足</th>
+<th>特徴</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>ereg</td>
+<td>ereg 系</td>
 <td>利用しない（PHP7.0以降削除）</td>
 </tr>
 <tr>
-<td>preg</td>
+<td>preg 系</td>
 <td>UTF-8 の場合のみ日本語を扱える</td>
 </tr>
 <tr>
-<td>mb_ereg</td>
+<td>mb_ereg 系</td>
 <td>様々な文字エンコーディングが利用できる</td>
 </tr>
 </tbody>
@@ -886,7 +894,7 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
 <pre><code class="language-php">    // preg_match 関数を利用する場合
 
     $p = filter_input(INPUT_GET, 'p');
-    if (preg_match('\/A[a-z0-9]{1,5}\z/ui', $p) !== 1) {
+    if (preg_match('/\A[a-z0-9]{1,5}\z/ui', $p) !== 1) {
         die('1文字以上5文字以下の英数字を入力してください');
     }
 
@@ -903,7 +911,7 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
             <section >
                 <h4><a id="user-content-正規表現による入力値検証の例（２）" class="anchor" href="#正規表現による入力値検証の例（２）" aria-hidden="true"></a>正規表現による入力値検証の例（２）</h4>
 <ul>
-<li>制御文字を含んでいないこと
+<li>制御文字を含まないことをチェック
 <ul>
 <li>[[:^cntrl:]]という<a href="https://www.php.net/manual/ja/regexp.reference.character-classes.php">POSIX文字クラス</a>を利用</li>
 </ul>
@@ -927,7 +935,11 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
             <section >
                 <h4><a id="user-content-定義済み文字クラスと正規表現" class="anchor" href="#定義済み文字クラスと正規表現" aria-hidden="true"></a>定義済み文字クラスと正規表現</h4>
 <ul>
-<li>定義済み文字クラス（\d や \w ）よりも文字クラスを明示するほうが安全</li>
+<li>定義済み文字クラス（\d や \w ）よりも文字クラスを明示するほうが安全
+<ul>
+<li>全角文字を含む場合がある</li>
+</ul>
+</li>
 </ul>
 
             </section>
@@ -979,7 +991,7 @@ $name = mb_convert_encoding($name, 'UTF-8', 'Shift_JIS');
             
             <h4><a id="user-content-appendix-4" class="anchor" href="#appendix-4" aria-hidden="true"></a>APPENDIX (4)</h4>
 <p>サンプルアプリケーション</p>
-<p><a href="https://example.jp/42/">https://example.jp/42/</a></p>
+<p><a href="http://example.jp/42/">http://example.jp/42/</a></p>
 
             </section>
     
